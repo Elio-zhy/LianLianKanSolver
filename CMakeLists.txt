@@ -2,25 +2,19 @@ cmake_minimum_required (VERSION 3.14.0)
 
 set( CMAKE_CXX_COMPILER "D:/Programs/msys64/clang64/bin/clang++.exe" )
 set( CMAKE_C_COMPILER "D:/Programs/msys64/clang64/bin/clang.exe" )
-set( CMAKE_GENERATOR "Ninja" )
+set( CMAKE_GENERATOR "MinGW Makefiles" )
 
 project(LianLianKanSolver)
+set(CMAKE_BUILD_TYPE Debug)
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}/src
-)
+include(FindPkgConfig)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK4 REQUIRED gtk4)
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
-add_executable(LianLianKanSolver
-    ${PROJECT_SOURCE_DIR}/src/main.c
-    ${PROJECT_SOURCE_DIR}/src/board.c
-    ${PROJECT_SOURCE_DIR}/src/calculate.c
-    ${PROJECT_SOURCE_DIR}/src/click.c
-    ${PROJECT_SOURCE_DIR}/src/main.c
-    ${PROJECT_SOURCE_DIR}/src/solution.c
-    ${PROJECT_SOURCE_DIR}/src/solve.c
-)
+file (GLOB_RECURSE ui_RESOURCES CONFIGURE_DEPENDS "src/*/*.c")
+add_executable(gui ${ui_RESOURCES})
 
-target_link_libraries(LianLianKanSolver PRIVATE Threads::Threads)
+target_include_directories(gui PRIVATE ${GTK4_INCLUDE_DIRS})
+target_link_libraries(gui PRIVATE ${GTK4_LINK_LIBRARIES})
