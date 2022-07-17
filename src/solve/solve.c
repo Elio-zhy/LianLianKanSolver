@@ -1,4 +1,4 @@
-#include "calculate.h"
+#include "solve.h"
 
 bool havePathCorner0(Board *board, Coord p1, Coord p2)
 {
@@ -142,10 +142,11 @@ bool findPath(Board *board, Coord p, Coord *dest)
     Coord intermediate;
     uint8_t val = boardAt(board, p);
     bool first_row = true;
+    int start;
 
     for (int i = p.row; i < rows; i++)
     {
-        int start = 0;
+        start = 0;
         if (first_row)
         {
             start = p.col + 1;
@@ -162,6 +163,37 @@ bool findPath(Board *board, Coord p, Coord *dest)
             {
                 dest->row = intermediate.row;
                 dest->col = intermediate.col;
+
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool findOneStep(Board *board, Action *action)
+{
+    unsigned rows = board->rows, cols = board->cols;
+    Coord cur, *dest;
+    dest = (Coord *)malloc(sizeof(Coord));
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            cur.row = i;
+            cur.col = j;
+
+            if (boardAt(board, cur) != 0 && findPath(board, cur, dest))
+            {
+                action->p1.row = cur.row;
+                action->p1.col = cur.col;
+                action->p2.row = dest->row;
+                action->p2.col = dest->col;
+
+                boardSet(board, cur, 0);
+                boardSet(board, *dest, 0);
 
                 return true;
             }

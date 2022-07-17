@@ -8,18 +8,23 @@
 
 #define BASEADDR 0x00199f5c
 
-// game board coordinate
-typedef struct Coord Coord;
-// game board
-typedef struct Board Board;
+typedef struct _Coord Coord;
+typedef struct _Action Action;
+typedef struct _Board Board;
 
-struct Coord
+struct _Coord
 {
     unsigned row;
     unsigned col;
 };
 
-struct Board
+struct _Action
+{
+    Coord p1;
+    Coord p2;
+};
+
+struct _Board
 {
     uint8_t *data;
     unsigned rows;
