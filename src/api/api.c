@@ -21,8 +21,7 @@ void detect_thread(gpointer data)
 
     if ((*tdata->hwnd = FindWindowW(L"#32770", L"QQ游戏 - 连连看角色版")) != 0)
     {
-        gtk_label_set_label(GTK_LABEL(tdata->status), "found window!");
-        printf("hwnd: %p\n", *tdata->hwnd);
+        gtk_label_set_label(GTK_LABEL(tdata->status), "found game window!");
     }
     else
     {
@@ -38,6 +37,11 @@ void one_step_thread(gpointer data)
     unsigned rows = tdata->rows, cols = tdata->cols;
     Action *action;
     action = (Action *)malloc(sizeof(Action));
+
+    if (hwnd == 0)
+    {
+        return;
+    }
 
     getBoardFromMemory(board, hwnd, rows, cols);
     if (!isBoardEmpty(board) && findOneStep(board, action))
@@ -58,12 +62,17 @@ void solve_thread(gpointer data)
     bool first_action = true;
     action = (Action *)malloc(sizeof(Action));
 
+    if (hwnd == 0)
+    {
+        return;
+    }
+
     getBoardFromMemory(board, hwnd, rows, cols);
     while (!isBoardEmpty(board))
     {
         if (first_action == false)
         {
-            delay = gtk_scale_get_digits(GTK_SCALE(scale));
+            delay = gtk_range_get_value(GTK_RANGE(scale));
             Sleep(delay);
         }
 

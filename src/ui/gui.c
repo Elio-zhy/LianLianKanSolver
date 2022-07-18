@@ -14,6 +14,7 @@ static void activate(GtkApplication *app, gpointer user_data)
     GtkWidget *one_step_btn, *solve_btn, *detect_btn; // Button
 
     HWND *hwnd = (HWND *)malloc(sizeof(HWND));
+    *hwnd = 0;
     Board *board = createBoard(ROWS * COLS);
     DetectThreadData *detect_data = (DetectThreadData *)malloc(sizeof(DetectThreadData));
     OneStepThreadData *one_step_data = (OneStepThreadData *)malloc(sizeof(OneStepThreadData));
@@ -22,7 +23,7 @@ static void activate(GtkApplication *app, gpointer user_data)
     // widget initialization
     window = gtk_application_window_new(app);
     grid = gtk_grid_new();
-    scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 2000, 100);
+    scale = gtk_scale_new_with_range(GTK_ORIENTATION_HORIZONTAL, 0, 2000, 1);
     delay = gtk_label_new("Delay:");
     status = gtk_label_new("waiting for game...");
     one_step_btn = gtk_button_new_with_label("one step");
@@ -45,14 +46,12 @@ static void activate(GtkApplication *app, gpointer user_data)
     gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
 
     // widget properties
-    int width;
-    gtk_widget_get_size_request(status, &width, NULL);
-    gtk_widget_set_size_request(status, width, -1);
     gtk_window_set_title(GTK_WINDOW(window), "Solver");
     gtk_window_set_resizable(GTK_WINDOW(window), false);
     gtk_scale_add_mark(GTK_SCALE(scale), 0, GTK_POS_BOTTOM, "0s");
     gtk_scale_add_mark(GTK_SCALE(scale), 1000, GTK_POS_BOTTOM, "1s");
     gtk_scale_add_mark(GTK_SCALE(scale), 2000, GTK_POS_BOTTOM, "2s");
+    gtk_range_set_value(GTK_RANGE(scale), 2000);
 
     // bind signal
     detect_data->hwnd = hwnd;

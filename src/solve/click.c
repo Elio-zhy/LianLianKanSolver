@@ -5,7 +5,6 @@ void clickAt(HWND hwnd, unsigned x, unsigned y)
     DWORD lParam;
 
     lParam = MAKELPARAM(x, y);
-    printf("x: %u, y: %u\n", x, y);
     SendMessageA(hwnd, WM_LBUTTONDOWN, 0, lParam);
     SendMessageA(hwnd, WM_LBUTTONUP, 0, lParam);
 }
