@@ -1,11 +1,5 @@
 # LianLianKanSolver
-LianLianKan Solver with multithread.
+LianLianKan Solver.
 
 ## Usage
-```powershell
-# set environment variable `DEFAULT_DELAY`
-$env:DEFAULT_DELAY=""
-
-# then run the executable file after game is running
-LianLianKanSolver.exe
-```
+- Set display scale to 100% or it may not work properly
